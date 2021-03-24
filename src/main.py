@@ -25,16 +25,11 @@ alertRecipients = lout.readConfig(config, "alertRecipients")
 emailSubject = str(lout.readConfig(config, "emailSubject"))
 emailContent = str(lout.readConfig(config, "emailContent"))
 
-for email in alertRecipients:
-    sendEmail(sendGridAPI, from_email, email, emailSubject, emailContent)
-
 enabled = True
 warn = False
 
-#while enabled:
-#    if warn:
-#        time = lout.time()
-#        for email in alertRecipients:
-#            sendEmail(sendGridAPI, from_email, email, emailSubject, emailContent)
-
-    
+while enabled:
+    if warn:
+        time = lout.time()
+        for email in alertRecipients:
+            sendEmail(sendGridAPI, from_email, email, emailSubject, emailContent)
