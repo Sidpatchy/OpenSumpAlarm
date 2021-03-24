@@ -1,0 +1,15 @@
+# String, your sendgrid API key
+sendGridAPI: ""
+
+# Email to send from
+OpenSump_email: ""
+
+# Email(s) to send to
+alertRecipients:
+  - "example@example.com"
+
+# Email subject line
+emailSubject: "OpenSumpAlarm - Liquid Detected!"
+
+# Email contents
+emailContent: "A significant rise in water levels was detected! Investigation is encouraged."
