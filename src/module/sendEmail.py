@@ -1,9 +1,8 @@
-# The main file for OpenSumpAlarm by Sidpatchy
+# Email sender for OpenSumpAlarm by Sidpatchy
 # A project to detect sump pump failure or inadequacy
-# More info on GitHub: 
+# More info on GitHub: https://github.com/Sidpatchy/OpenSumpAlarm
 
 # Import libraries
-import sLOUT as lout
 import os
 import sendgrid
 from sendgrid.helpers.mail import Mail, Email, To, Content

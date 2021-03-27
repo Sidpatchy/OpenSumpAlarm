@@ -106,7 +106,7 @@ def log(file, startTime=DT.datetime.now(), processName='Unknown', name=True, sta
     if startup == True:
 
         # read the botname from the config
-        botName = readConfig(file, 'botName')
+        botName = "OpenSumpAlarm"
         
         # Console Stuff
         print('--------------{}---------------'.format(botName))                # Divder in the console
@@ -127,13 +127,13 @@ def log(file, startTime=DT.datetime.now(), processName='Unknown', name=True, sta
 
     elif startup == False:
         # read the botname from the config
-        botName = readConfig(file, 'botName')
+        botName = "OpenSumpAlarm"
 
         # Console Stuff
         print('--------------{}---------------'.format(botName))                # Divder in the console
         print('Current Time: {}'.format(DT.datetime.now()))                     # Prints the current time
         print('Time to run: {}'.format((DT.datetime.now() - startTime)))        # Subtracts the time passed in via startTime from the current time
-        print('{} was run'.format(processName))                                 # States which process was run
+        print('{}'.format(processName))                                 # States which process was run
         print()                                                                 # SPACER!
 
         try:
@@ -141,7 +141,7 @@ def log(file, startTime=DT.datetime.now(), processName='Unknown', name=True, sta
             writeFile('{}Logs.txt'.format(botName), '\n--------------{}---------------'.format(botName))
             writeFile('{}Logs.txt'.format(botName), 'Current Time: {}'.format(DT.datetime.now()))
             writeFile('{}Logs.txt'.format(botName), 'Time to run: {}'.format((DT.datetime.now() - startTime)))
-            writeFile('{}Logs.txt'.format(botName), '{} was run\n'.format(processName))
+            writeFile('{}Logs.txt'.format(botName), '{}\n'.format(processName))
         except:
             print('ERROR: Unable to write to log file \'{}Logs.txt\'.'.format(botName))
             sleep(5)

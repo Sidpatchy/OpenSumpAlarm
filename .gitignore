@@ -1,2 +1,3 @@
 sendgrid.env
 *.pyc
+src/OpenSumpAlarmLogs.txt
