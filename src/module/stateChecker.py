@@ -13,7 +13,7 @@ import adafruit_hcsr04
 #   echo_pin: board.pin, RX pin
 #   warnDistance: float, distance (in centimeters) water should be from sensor to trigger a warning
 #   readTime: int or float, time to read from sensor to generate an average (default: 15)
-def stateChecker(sonar, warnDistance, readTime=15):
+def stateChecker(sonar, warnDistance, readTime=16):
     distances = []
     
     # We take an average distance over a period of time to hopefully prevent false alarms as a result of signal noise/sensor inaccuracies
@@ -24,7 +24,7 @@ def stateChecker(sonar, warnDistance, readTime=15):
             distances.append(sonar.distance)
         except RuntimeError:
             pass
-        time.sleep(0.1)
+        time.sleep(2)
     
     if sum(distances) == 0:
         return "Sensor returned null value, check your wiring."
@@ -32,6 +32,7 @@ def stateChecker(sonar, warnDistance, readTime=15):
         distAvg = sum(distances) / len(distances)
         distances = []
 
+    print(distAvg)
     if int(distAvg) <= int(warnDistance):
         # If sensor is tripped return True
         return True
