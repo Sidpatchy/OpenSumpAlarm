@@ -3,26 +3,36 @@
 # More info on GitHub: https://github.com/Sidpatchy/OpenSumpAlarm
 
 # Import libraries
-import module.sLOUT as lout
+import sLOUT as lout
 import os
-from time import sleep
-from datetime import timedelta
+import time
+import board
+import datetime as DT
+import adafruit_hcsr04
 
 # Import modules
 from module.sendEmail import sendEmail
 from module.stateChecker import stateChecker
 
-# Sensor Pin
-#sensorPin = board.D10
+# Sensor Pins
+txPin = board.D14
+rxPin = board.D15
 
 # Store version info
-version = ["v0.1.0-a.2", "2021-03-26"]
+version = ["v0.1.0-b.1", "2021-03-29"]
+
+# startTime
+startTime = lout.time()
 
 # Location of config and log file
 config = "config.yml"
 logFile = "OpenSumpAlarm.log"
 
 # Parse data from config file
+
+# Sensor values
+warnDistance = int(lout.readConfig(config, "warnDistance"))
+readTime = float(lout.readConfig(config, "readTime"))
 
 # Email Data
 sendGridAPI = str(lout.readConfig(config, "sendGridAPI"))
@@ -33,30 +43,34 @@ emailContent = str(lout.readConfig(config, "emailContent"))
 
 enabled = True
 warn = False
-emailSendTime = lout.time()
-sensorPin = 4
+timeLimit = False
+emailSendTime = DT.datetime.now()
+sonar = adafruit_hcsr04.HCSR04(trigger_pin=txPin, echo_pin=rxPin)
+
+lout.log(config, startTime=startTime, startup=True)
 
 while enabled:
-    time = lout.time()
-    sensorValue = stateChecker(sensorPin)
+    currentTime = DT.datetime.now()
+    sensorValue = stateChecker(sonar, warnDistance, readTime)
+
+    # Because apparently Python thinks "any string" = True
+    if sensorValue == True and timeLimit:
+        warn = True
+        lout.log(config, currentTime, "SENSOR TRIPPED")
 
     if warn:
-        time = lout.time()
+        currentTime = DT.datetime.now()
         for email in alertRecipients:
             sendEmail(sendGridAPI, from_email, email, emailSubject, emailContent)
-            lout.log(logFile, time, "Email sent to: {}".format(email))
-        emailSendTime = lout.time() + timedelta(hours=1)
+            lout.log(config, currentTime, "Email sent to: {}".format(email))
+        emailSendTime = DT.datetime.now() + DT.timedelta(hours=1)
         warn = False
 
-    if time > emailSendTime:
+    if currentTime > emailSendTime:
         # if timeLimit, it's okay to log a new event
         # if not timeLimit, an event was logged within the last hour
         timeLimit = True
     else:
         timeLimit = False
 
-    if sensorValue and timeLimit:
-        warn = True
-        lout.log(logFile, time, "SENSOR (pin {}) TRIPPED".format(sensorPin))
-
-    sleep(0.5)
+    time.sleep(0.5)

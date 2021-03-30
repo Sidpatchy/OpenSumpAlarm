@@ -13,3 +13,15 @@ emailSubject: "OpenSumpAlarm - Liquid Detected!"
 
 # Email contents
 emailContent: "A significant rise in water levels was detected! Investigation is encouraged."
+
+# Distance (centimeters) water should be from sensor before triggering a warning
+# Integer, most sensors have too much signal noise for accuracy to matter
+warnDistance: 5
+
+# Amount of time to read data from the sensor. You probably don't need to change this.
+# This is done to prevent false alarms as a result of sensor inaccuracies and temporary rises above safe limits.
+readTime: 15.0
+
+# DO NOT CHANGE, automatically managed.
+configVersion: 1.0
+botName: "OpenSumpAlarm"
